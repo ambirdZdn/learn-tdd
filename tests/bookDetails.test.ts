@@ -25,6 +25,17 @@ describe('showBookDtls', () => {
         jest.clearAllMocks(); // Clear mocks after each test
     });
 
+    it('should return 404 for non string book id', async () => {
+
+        const id = {id: '12345'};
+        // Act
+        await showBookDtls(res as Response, id as unknown as string);
+
+        // Assert
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.send).toHaveBeenCalledWith(`Book ${id} not found`);
+    }); 
+
     it('should return book details when the book and copies exist', async () => {
         // Mocking the Book model's findOne and populate methods
         const mockFindOne = jest.fn().mockReturnValue({
@@ -99,4 +110,6 @@ describe('showBookDtls', () => {
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.send).toHaveBeenCalledWith('Error fetching book 12345');
     });
+
+    
 });
